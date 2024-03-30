@@ -56,7 +56,7 @@ const createPropertyController = async(req,res) =>{
             budget,
             size,
         }).save();
-
+       
         res.status(201).send({
             success:true,
             message:"Property Added successfully",
