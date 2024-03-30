@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-
+import Modal from 'react-modal';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-
+import Layout from '../components/Layout';
 
 const RoommateDetails = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [roommate, setRoommate] = useState(null);
+  const [selectedRoommate, setSelectedRoommate] = useState(null);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -28,25 +30,43 @@ const RoommateDetails = () => {
     }
   };
 
-  const handleEditRoommate = () => {
-    // Implement logic to navigate to the edit roommate page
-    navigate(`/roommates/${params.roomId}/edit`);
+  const handleCloseUpdateModal = () => {
+    setShowUpdateModal(false);
+  };
+
+  const handleEditRoommate = (roommate) => {
+    setSelectedRoommate(roommate);
+    setShowUpdateModal(true);
+  };
+
+  const handleUpdateRoommate = async () => {
+    try {
+      await axios.put(
+        `http://localhost:5000/roommate/api/roommates/${selectedRoommate._id}`,
+        selectedRoommate
+      );
+      handleCloseUpdateModal();
+      window.location.reload(); 
+    } catch (error) {
+      console.error('Error updating Roommate:', error);
+    }
   };
 
   const handleDeleteRoommate = async () => {
     try {
       // Implement logic to delete the roommate
-      await axios.delete(`https://your-api-url.com/roommates/${params.roomId}`);
-      //toast.success('Roommate deleted successfully');
-      // Redirect to a different page after deletion
-      navigate('/roommates');
+      const confirmBox = window.confirm(`Are You Sure You Want To Delete this Roommate?`);
+      if (confirmBox) {
+        await axios.delete(`http://localhost:5000/roommate/api/roommates/${params.roomId}`);
+        navigate('/viewProperty'); // Redirect after deletion
+      }
     } catch (error) {
       console.error('Error deleting roommate:', error);
     }
   };
 
   return (
-    <div>
+    <Layout>
       {roommate ? (
         <div className="roommate-details-container">
           <h1 className="roommate-details-title">Roommate Details</h1>
@@ -58,7 +78,7 @@ const RoommateDetails = () => {
             {/* Add more details as needed */}
           </div>
           <div className="roommate-details-actions">
-            <button className="edit-roommate-btn" onClick={handleEditRoommate}>
+            <button className="edit-roommate-btn" onClick={() => handleEditRoommate(roommate)}>
               Edit Roommate
             </button>
             <button className="delete-roommate-btn" onClick={handleDeleteRoommate}>
@@ -69,7 +89,81 @@ const RoommateDetails = () => {
       ) : (
         <p>Loading...</p>
       )}
-    </div>
+
+      {/* Update Roommate Modal */}
+      <Modal
+        isOpen={showUpdateModal}
+        onRequestClose={handleCloseUpdateModal}
+        className="ReactModal__Content"
+        overlayClassName="ReactModal__Overlay"
+      >
+        <div className="modal-content">
+          <h3 className="modal-title">Edit Roommate</h3>
+          <label htmlFor="name" className="modal-label">
+            Name:
+            <input
+              type="text"
+              id="name"
+              className="modal-input"
+              value={selectedRoommate?.name || ''}
+              onChange={(e) =>
+                setSelectedRoommate({ ...selectedRoommate, name: e.target.value })
+              }
+            />
+          </label>
+          <label htmlFor="age" className="modal-label">
+            Age:
+            <input
+              type="text"
+              id="age"
+              className="modal-input"
+              value={selectedRoommate?.age || ''}
+              onChange={(e) =>
+                setSelectedRoommate({ ...selectedRoommate, age: e.target.value })
+              }
+            />
+          </label>
+          <label htmlFor="gender" className="modal-label">
+            Gender:
+            <select
+              id="gender"
+              className="modal-input"
+              value={selectedRoommate?.gender || ''}
+              onChange={(e) =>
+                setSelectedRoommate({ ...selectedRoommate, gender: e.target.value })
+              }
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </label>
+          <label htmlFor="vegNonveg" className="modal-label">
+            Veg/NonVeg:
+            <select
+              id="vegNonveg"
+              className="modal-input"
+              value={selectedRoommate?.vegNonveg || ''}
+              onChange={(e) =>
+                setSelectedRoommate({ ...selectedRoommate, vegNonveg: e.target.value })
+              }
+            >
+              <option value="">Select Preference</option>
+              <option value="Veg">Veg</option>
+              <option value="Nonveg">Nonveg</option>
+            </select>
+          </label>
+          <div className="modal-buttons">
+            <button className="cancel-btn" onClick={handleCloseUpdateModal}>
+              Cancel
+            </button>
+            <button className="submit-btn" onClick={handleUpdateRoommate}>
+              Update
+            </button>
+          </div>
+        </div>
+      </Modal>
+      </Layout>
   );
 };
 

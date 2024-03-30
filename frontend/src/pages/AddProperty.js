@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import Layout from '../components/Layout';
 const AddProperty = () => {
     const navigate = useNavigate();
    const [properties, setProperties] = useState([]);
@@ -11,7 +12,7 @@ const AddProperty = () => {
   });
 
 //   useEffect(() => {
-//     // Fetch properties data from backend API
+//     //Fetch properties data from backend API
 //     const fetchProperties = async () => {
 //       const response = await axios.get('http://localhost:5000/property/api/properties');
 //       setProperties(response.data.properties);
@@ -37,15 +38,16 @@ const AddProperty = () => {
   };
 
   return (
+    <Layout>
     <div className="container">
-      {/* <h2>Properties</h2>
-      <ul className="table"> */}
-        {/* {properties.map(property => (
+       {/* <h2>Properties</h2>
+      <ul className="table"> 
+         {properties.map(property => (
           <li key={property.property_id}>
             Location: {property.location} | Budget: {property.budget} | Size: {property.size}
           </li>
-        ))} */}
-      {/* </ul> */}
+        ))} 
+       </ul>  */}
       <div className="form-group">
         <h3>Add New Property</h3>
         <label htmlFor="location" className="label">Location:</label>
@@ -78,6 +80,7 @@ const AddProperty = () => {
         <button className="button" onClick={handleAddProperty}>Add Property</button>
       </div>
     </div>
+    </Layout>
   );
 };
 

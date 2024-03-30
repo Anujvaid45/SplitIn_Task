@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 import { FaTrash, FaPencilAlt, FaPlus } from 'react-icons/fa';
 import '../styles.css'
 import { Link } from 'react-router-dom';
+import Layout from '../components/Layout';
 
 const ViewProperty = () => {
   const [properties, setProperties] = useState([]);
@@ -77,6 +78,7 @@ const ViewProperty = () => {
   };
 
   return (
+    <Layout>
     <div className="container">
       <h2>Properties</h2>
       <ul className="table">
@@ -99,7 +101,6 @@ const ViewProperty = () => {
                   .map((roommate) => (
                     <div key={roommate._id} className="roommate-item">
                         <Link style={{textDecoration:'none',color:'black'}} to={`/roommate/${roommate._id}`}>{roommate.name}</Link>
-                      {/* Display other roommate details as needed */}
                     </div>
                   ))}
               </div>
@@ -114,11 +115,7 @@ const ViewProperty = () => {
                 
                 <button className="edit-btn" onClick={() => handleEditProperty(property)}>
                   <FaPencilAlt />
-                 </button>
-                
-                {/* Add Edit and Delete buttons for properties */}
-                
-                
+                 </button>             
               </div>
             </div>
           </li>
@@ -249,6 +246,7 @@ const ViewProperty = () => {
         </div>
       </Modal>
     </div>
+    </Layout>
   );
 };
 
