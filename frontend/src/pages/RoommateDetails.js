@@ -22,7 +22,7 @@ const RoommateDetails = () => {
   const getRoommateDetails = async () => {
     try {
       const response = await axios.get(
-        `https://splitin-task.onrender.com/roommate/api/roommates/${params.roomId}`
+        `http://localhost:5000/roommate/api/roommates/${params.roomId}`
       );
       setRoommate(response.data.roommate);
     } catch (error) {
@@ -42,7 +42,7 @@ const RoommateDetails = () => {
   const handleUpdateRoommate = async () => {
     try {
       await axios.put(
-        `https://splitin-task.onrender.com/roommate/api/roommates/${selectedRoommate._id}`,
+        `http://localhost:5000/roommate/api/roommates/${selectedRoommate._id}`,
         selectedRoommate
       );
       handleCloseUpdateModal();
@@ -57,7 +57,7 @@ const RoommateDetails = () => {
       // Implement logic to delete the roommate
       const confirmBox = window.confirm(`Are You Sure You Want To Delete this Roommate?`);
       if (confirmBox) {
-        await axios.delete(`https://splitin-task.onrender.com/roommate/api/roommates/${params.roomId}`);
+        await axios.delete(`http://localhost:5000/roommate/api/roommates/${params.roomId}`);
         navigate('/viewProperty'); // Redirect after deletion
       }
     } catch (error) {

@@ -16,12 +16,12 @@ const ViewProperty = () => {
 
   useEffect(() => {
     const fetchProperties = async () => {
-      const response = await axios.get('https://splitin-task.onrender.com/property/api/properties');
+      const response = await axios.get('http://localhost:5000/property/api/properties');
       setProperties(response.data.properties);
     };
 
     const fetchRoommates = async () => {
-      const response = await axios.get('https://splitin-task.onrender.com/roommate/api/roommates');
+      const response = await axios.get('http://localhost:5000/roommate/api/roommates');
       setRoommates(response.data.roommates);
     };
 
@@ -48,7 +48,7 @@ const ViewProperty = () => {
     try {
       const confirmBox = window.confirm(`Are You Sure You Want To Delete this Property?`);
       if (confirmBox) {
-        await axios.delete(`https://splitin-task.onrender.com/property/api/properties/${propertyId}`);
+        await axios.delete(`http://localhost:5000/property/api/properties/${propertyId}`);
         window.location.reload();
       }
     } catch (error) {
@@ -57,7 +57,7 @@ const ViewProperty = () => {
   };
   const handleUpdateProperty = async () => {
     try {
-      await axios.put(`https://splitin-task.onrender.com/property/api/properties/${selectedProperty._id}`, selectedProperty);
+      await axios.put(`http://localhost:5000/property/api/properties/${selectedProperty._id}`, selectedProperty);
       handleCloseUpdateModal();
       window.location.reload();
     } catch (error) {
@@ -66,7 +66,7 @@ const ViewProperty = () => {
   };
   const handleCreateRoommate = async () => {
     try {
-      await axios.post('https://splitin-task.onrender.com/roommate/api/roommates', {
+      await axios.post('http://localhost:5000/roommate/api/roommates', {
         ...newRoommate,
         propertyId: selectedProperty._id,
       });
